@@ -1,6 +1,7 @@
 package com.example.tapv2;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -29,12 +30,13 @@ public class login extends AppCompatActivity {
         loggedIntent.putExtra("PASSWORD", pass);
         if (TextUtils.isEmpty(userInput.getText()) && TextUtils.isEmpty(passInput.getText())) {
             error.setText("Please Enter a username and password");
-            error.setTextColor();
+            error.setTextColor(Color.rgb(200,0,0));
 
         } else if (TextUtils.isEmpty(passInput.getText())) {
             error.setText("Please Enter a Password");
+            error.setTextColor(Color.rgb(200,0,0));
         } else {
                 startActivity(loggedIntent);
-                }
-                }
-                }
+        }
+    }
+}
