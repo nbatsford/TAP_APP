@@ -1,5 +1,6 @@
 package com.example.tapv2;
 
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -34,11 +35,11 @@ public class beam extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.beam);
-
         Intent beam = getIntent();
 
         String user = beam.getStringExtra("STARTUSER");
         String pass = beam.getStringExtra("STARTPASS");
+
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
         if (mNfcAdapter != null) {
@@ -52,6 +53,7 @@ public class beam extends AppCompatActivity {
                         createNewTextRecord(user.toString(), Locale.ENGLISH, true),
                         createNewTextRecord(pass.toString(), Locale.ENGLISH,true) });
 
+        mNfcAdapter.setOnNdefPushCompleteCallback(connect(user, pass), this);
     }
 
     public static NdefRecord createNewTextRecord(String text, Locale locale, boolean encodeInUtf8) {
@@ -77,6 +79,7 @@ public class beam extends AppCompatActivity {
 
         if (mNfcAdapter != null)
             mNfcAdapter.enableForegroundNdefPush(this, mNdefMessage);
+
     }
 
     @Override
@@ -85,6 +88,10 @@ public class beam extends AppCompatActivity {
 
         if (mNfcAdapter != null)
             mNfcAdapter.disableForegroundNdefPush(this);
+    }
+
+    public void connect(String user, String pass){
+
     }
 
 }
