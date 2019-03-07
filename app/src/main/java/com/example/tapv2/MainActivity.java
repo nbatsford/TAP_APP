@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void startConnect(View view) {
-        Intent conIntent = new Intent(this, beam.class);
+        Intent conIntent = new Intent(this, Beam.class);
         Intent loggedIntent = getIntent();
 
         String user = loggedIntent.getStringExtra("USERNAME");
