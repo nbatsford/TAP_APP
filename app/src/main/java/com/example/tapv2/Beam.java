@@ -1,6 +1,7 @@
 package com.example.tapv2;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.nfc.NdefMessage;
@@ -18,6 +19,8 @@ import android.text.format.Time;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.nio.charset.Charset;
@@ -25,12 +28,14 @@ public class Beam extends Activity implements CreateNdefMessageCallback,
         OnNdefPushCompleteCallback {
     NfcAdapter mNfcAdapter;
     private static final int MESSAGE_SENT = 1;
-
+    wifiConnect connect = new wifiConnect();
+    Activity act = new Activity();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.beam);
-
+        spinner = findViewById(R.id.progressCon);
+        spinner.setVisibility(View.INVISIBLE);
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
         if (mNfcAdapter == null) {
@@ -67,11 +72,18 @@ public class Beam extends Activity implements CreateNdefMessageCallback,
                     Intent beam = getIntent();
                     String tempuser = beam.getStringExtra("STARTUSER");
                     String temppass =beam.getStringExtra("STARTPASS");
-                    Intent conIntent = new Intent(Beam.this, wifiConnect .class);
+                    final TextView status = (TextView)findViewById(R.id.textStatus);
 
-                    conIntent.putExtra("CONUSER", tempuser);
-                    conIntent.putExtra("CONPASS", temppass);
-                    startActivity(conIntent);
+                    boolean continueConnect = connectToWiFi(tempuser, temppass, status);
+                    if (continueConnect != true) {
+                        status.setText("Cannot Connnect to Wi-Fi");
+                        spinner.setVisibility(View.INVISIBLE);
+                        Toast.makeText(getApplicationContext(),"Cannot Connect to WiFi", Toast.LENGTH_LONG).show();
+                    } else {
+                        spinner.setVisibility(View.INVISIBLE);
+                        status.setText("Connected To Wi-Fi");
+                        Toast.makeText(getApplicationContext(),"Connected to WiFi", Toast.LENGTH_LONG).show();
+                    }
                     break;
             }
         }
@@ -97,5 +109,17 @@ public class Beam extends Activity implements CreateNdefMessageCallback,
 
         NdefMessage msg = (NdefMessage) rawMsgs[0];
     }
-
+    public boolean connectToWiFi(String user, String pass, TextView status) {
+        spinner = (ProgressBar)findViewById(R.id.progressCon);
+        spinner.setVisibility(View.VISIBLE);
+        status.setText("Connecting To Wi-Fi");
+        wifiConnect connect = new wifiConnect();
+        boolean connected = connect.wifi_Connect(user, pass, getApplicationContext());
+        if (connected != true) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+        private ProgressBar spinner;
 }

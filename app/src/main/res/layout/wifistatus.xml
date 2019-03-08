@@ -1,15 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/txtStatus"
+        android:layout_width="128dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="176dp"
+        android:layout_marginTop="265dp"
+        android:layout_marginEnd="176dp"
+        android:layout_marginBottom="78dp"
+        android:text="@string/temp"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/progressCon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressCon"
+        style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="176dp"
-        tools:layout_editor_absoluteY="265dp" />
+        android:layout_marginStart="181dp"
+        android:layout_marginTop="78dp"
+        android:layout_marginEnd="182dp"
+        android:layout_marginBottom="78dp"
+        app:layout_constraintBottom_toTopOf="@+id/butRetry"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtStatus" />
+
+    <Button
+        android:id="@+id/butRetry"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="120dp"
+        android:layout_marginTop="78dp"
+        android:layout_marginEnd="122dp"
+        android:layout_marginBottom="171dp"
+        android:text="@string/button"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progressCon" />
 </android.support.constraint.ConstraintLayout>
