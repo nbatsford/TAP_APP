@@ -3,12 +3,14 @@ package com.example.tapv2;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiEnterpriseConfig;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -24,15 +26,17 @@ public class wifiConnect {
     WifiConfiguration wifiConfig = new WifiConfiguration();
     WifiEnterpriseConfig wifiEnterpriseConfig = new WifiEnterpriseConfig();
     WifiManager wifiManager;
+    WifiInfo wifiInfo;
 
     public boolean wifi_Connect(String user, String pass, String ssid, Context context) {
-
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor currentState = preferences.edit();
 
         wifiConfig.SSID = String.format("\"%s\"", ssid);
         wifiEnterpriseConfig.setPassword(pass);
         Log.d("Password", "CONNECTING WITH PASSWORD: " + pass);
         wifiEnterpriseConfig.setIdentity(user);
-        Log.d("username" , "CONNECTING WITH USERNAME: " + user);
+        Log.d("username", "CONNECTING WITH USERNAME: " + user);
 
         wifiEnterpriseConfig.setEapMethod(WifiEnterpriseConfig.Eap.PEAP);
         wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.IEEE8021X);
@@ -58,8 +62,10 @@ public class wifiConnect {
         if (!res1 || res == -1 || !disableNetwork || !saveNetwork || !enableNetwork) {
             //failed Connnection
             Toast.makeText(context, "Cannnot Connect to Wi-Fi", Toast.LENGTH_LONG).show();
+            currentState.putBoolean("CAN NOT CONNECT", true);
             return false;
         } else {
+            currentState.putBoolean("CONNECT", true);
             return true;
         }
     }
