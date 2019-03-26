@@ -27,6 +27,9 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.util.Random;
 import java.util.Set;
 
 public class login extends AppCompatActivity {
@@ -85,6 +88,30 @@ public class login extends AppCompatActivity {
             }
         });
 
+    }
+    public void randomDetails(View view) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor saveDetails = preferences.edit();
+        Intent loggedin = new Intent(this, MainActivity.class);
+
+        String user = randomString();
+        String pass = randomString();
+
+        saveDetails.putString("USERNAME", user);
+        saveDetails.putString("PASSWORD", pass);
+        saveDetails.apply();
+        startActivity(loggedin);
+    }
+
+    public String randomString(){
+        String source = "ABCDEFGHIJKMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        Random random = new Random();
+        char[] string = new char[10];
+        for (int i =0; i < 10; i++) {
+            string[i] = source.charAt(random.nextInt(source.length()));
+        }
+
+        return new String(string);
     }
 
     public void locationsFile(Context context) {
