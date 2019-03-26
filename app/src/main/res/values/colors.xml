@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--App Theme Colours-->
-    <color name="colorPrimary">#ff9900</color>
-    <color name="colorPrimaryDark">#cc7a00</color>
+    <color name="backgroundPrimary">#f3f3f3</color>
+    <color name="colorPrimary">#7FB1B2</color>
+    <color name="colorPrimaryDark">#539699</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="buttonColour">#7fb1b2</color>
     <!--Background Colours-->
-    <color name="popupBackground_Orange">#ff9900</color>
+    <color name="popupBackground">#7fb1b2</color>
     <!--Text Colours-->
-    <color name="mainText_Orange">#ff9900</color>
-    <color name="popupText_White">#FFFFFF</color>
+    <color name="mainText_Orange">#539699</color>
+    <color name="popupText">#f3f3f3</color>
+    <color name="buttonText">#f3f3f3</color>
 </resources>

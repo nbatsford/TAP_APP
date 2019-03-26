@@ -5,20 +5,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/backgroundPrimary">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="top|center_horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome to TAP"
+            android:textSize="40dp"
+            android:layout_marginTop="80dp"
+            android:textColor="@color/mainText_Orange"/>
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center"
-        android:layout_marginBottom="150dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Welcome to Tap"
-            android:textSize="40dp"
-            android:layout_marginBottom="60dp"
-            android:textColor="@color/mainText_Orange"/>
+        android:gravity="center_vertical">
+        <!--android:layout_marginBottom="150dp"-->
         <FrameLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
@@ -68,8 +74,10 @@
                     android:layout_marginTop="20dp"
                     android:text="@string/login"
                     android:onClick="logIn"
-                    android:textColor="@color/popupText_White"
-                    android:background="@color/popupBackground_Orange"/>
+                    android:textColor="@color/buttonText"
+                    android:background="@color/buttonColour"
+                    android:elevation="20dp"
+                    android:translationZ="20dp"/>
             </LinearLayout>
         </FrameLayout>
     </LinearLayout>
@@ -85,7 +93,7 @@
             android:layout_marginBottom="15dp"
             android:onClick="loginHelp"
             android:text="Help"
-            android:textColor="@color/popupText_White"
-            android:background="@color/popupBackground_Orange"/>
+            android:textColor="@color/buttonText"
+            android:background="@color/buttonColour"/>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

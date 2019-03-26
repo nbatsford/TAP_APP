@@ -2,7 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/popupBackground_Orange"
+    android:background="@color/popupBackground"
     android:elevation="20dp"
     android:translationZ="20dp">
     <LinearLayout
@@ -22,41 +22,41 @@
             android:textSize="22sp"
             android:text="Connection Help"
             android:textStyle="bold"
-            android:textColor="@color/popupText_White"/>
+            android:textColor="@color/popupText"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="How To Connect:"
             android:textStyle="bold"
-            android:textColor="@color/popupText_White"/>
+            android:textColor="@color/popupText"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Connecting is easy. Put your phone onto the pad and wait for a vibration or the Touch to Beam Prompt on your screen."
-            android:textColor="@color/popupText_White"/>
+            android:textColor="@color/popupText"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="How do i connect to the Wi-Fi after Touching the pad?:"
             android:textStyle="bold"
-            android:textColor="@color/popupText_White"/>
+            android:textColor="@color/popupText"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="You phone will automaticaly connect after touching the pad, if you are unable to connect you will be told on screen, these will have the next instructions."
-            android:textColor="@color/popupText_White"/>
+            android:textColor="@color/popupText"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="Can i connect other devices?:"
             android:textStyle="bold"
-            android:textColor="@color/popupText_White"/>
+            android:textColor="@color/popupText"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Yes, As long as you have Touched the pad once with your phone, and remember the user details you entered, you can connect any device using those same details."
-            android:textColor="@color/popupText_White"/>
+            android:textColor="@color/popupText"/>
     </LinearLayout>
 </RelativeLayout>
