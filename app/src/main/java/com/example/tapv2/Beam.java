@@ -13,6 +13,7 @@ import android.nfc.NfcAdapter.OnNdefPushCompleteCallback;
 import android.nfc.NfcEvent;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -26,9 +27,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import android.content.IntentFilter;
 import android.content.IntentFilter.MalformedMimeTypeException;
 
@@ -36,6 +48,7 @@ public class Beam extends Activity implements CreateNdefMessageCallback,
         OnNdefPushCompleteCallback {
     NfcAdapter mNfcAdapter;
     private static final int MESSAGE_SENT = 1;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +62,7 @@ public class Beam extends Activity implements CreateNdefMessageCallback,
             Toast.makeText(this, "NFC NOT AVAILIBLE", Toast.LENGTH_LONG).show();
         } else {
             mNfcAdapter.setNdefPushMessageCallback(this, this);
-            mNfcAdapter.setOnNdefPushCompleteCallback(this,this);
+            mNfcAdapter.setOnNdefPushCompleteCallback(this, this);
         }
     }
 
@@ -69,6 +82,7 @@ public class Beam extends Activity implements CreateNdefMessageCallback,
         NdefMessage msg = new NdefMessage(NdefRecord.createMime("application/com.exapmple.android.beam", textRecord.getBytes()));
         return msg;
     }
+
     @Override
     public void onNdefPushComplete(NfcEvent arg0) {
         mHandler.obtainMessage(MESSAGE_SENT).sendToTarget();
@@ -88,55 +102,97 @@ public class Beam extends Activity implements CreateNdefMessageCallback,
     @Override
     public void onResume() {
         super.onResume();
-//        Intent checkSSID = getIntent();
-//        String ssid = checkSSID.getStringExtra("SSID");
-//        if (ssid != null) {
-//            Toast.makeText(this, "SAVED SSID" + ssid, Toast.LENGTH_LONG).show();
-//            collect(ssid);
-//        }
-        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())){
+
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
             processIntent(getIntent());
         }
     }
 
     @Override
-    public void onNewIntent(Intent intent){
+    public void onNewIntent(Intent intent) {
         setIntent(intent);
     }
-    void processIntent(Intent intent){
+
+    void processIntent(Intent intent) {
         //PROCESS NDEF MESSAGE INTO READABLE STRING
         Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-        if (rawMsgs != null && rawMsgs.length > 0){
+        if (rawMsgs != null && rawMsgs.length > 0) {
             NdefMessage[] messages = new NdefMessage[rawMsgs.length];
             for (int i = 0; i < rawMsgs.length; i++) {
                 messages[i] = (NdefMessage) rawMsgs[i];
             }
             NdefMessage msg = (NdefMessage) rawMsgs[0];
-            String payloadString = new String(msg.getRecords()[0].getPayload());
-            String ssid = payloadString.substring(payloadString.indexOf("[") + 1, payloadString.indexOf("]"));
-            Toast.makeText(this, ssid, Toast.LENGTH_LONG).show();
+            String payloadSSID = new String(msg.getRecords()[0].getPayload());
+            String payloadLoc = new String(msg.getRecords()[1].getPayload());
+            String ssid = payloadSSID.substring(payloadSSID.indexOf("[") + 1, payloadSSID.indexOf("]"));
             //COLLECT ALL DETAILS FOR CONNECTING TO WI-FI
-            collect(ssid);
+            collect(ssid, payloadLoc);
         }
     }
-    public void collect(String ssid) {
+
+    public void collect(String ssid, String Loc) {
         //RETRIVE USERNAME AND PASSWORD FROM SHARED PREFERENCES
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String user = preferences.getString("USERNAME", "NO USERNAME FOUND");
         String pass = preferences.getString("PASSWORD", "NO PASSWORD FOUND");
-        final TextView status = (TextView)findViewById(R.id.textStatus);
-
+        SharedPreferences.Editor saveDetails = preferences.edit();
+        final TextView status = findViewById(R.id.textStatus);
+        saveDetails.putString("SSID", ssid);
         //START CONNECTING TO WI-FI
         boolean connected = connectToWiFi(ssid, user, pass, status);
         if (connected != true) {
             status.setText("Cannot Connnect to Wi-Fi");
-            Toast.makeText(getApplicationContext(),"Cannot Connect to WiFi", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Cannot Connect to WiFi", Toast.LENGTH_LONG).show();
         } else {
-            status.setText("Connected To Wi-Fi");
-            Toast.makeText(getApplicationContext(),"Connected to WiFi", Toast.LENGTH_LONG).show();
-        }
+            status.setText("Connecting...");
+            class check implements Runnable {
+                private String str;
+                private Context conty;
+                private TextView status;
+                private ProgressBar spinner;
 
+                check(String ssid, Context context, TextView textView) {
+                    str = ssid;
+                    conty = context;
+                    status = textView;
+
+                }
+
+                wifiCheck connSSID = new wifiCheck();
+
+                public void run() {
+                    status.setText("Connecting....");
+                    spinner = (ProgressBar) findViewById(R.id.proCon);
+                    spinner.setVisibility(View.VISIBLE);
+                    int maxRetry = 5;
+                    int retryCount = 0;
+                    wifiCheck check = new wifiCheck();
+                    while (true)
+                        try {
+                            boolean rightConn = connSSID.connectionCheck(str, conty);
+                            if (rightConn == true) {
+                                break;
+                            }
+                        } catch (Exception e) {
+                            if (retryCount > maxRetry) {
+                                throw new RuntimeException("Could not get SSID");
+                            }
+                            retryCount++;
+                            continue;
+                        }
+/*                    spinner.setVisibility(View.GONE);*/
+                    status.setText("Connected to Wi-Fi");
+                    spinner.setVisibility(View.INVISIBLE);
+                    Thread.currentThread().interrupt();
+                }
+            }
+            Thread thread = new Thread(new check(ssid, this, status));
+            thread.start();
+            saveLoc(Loc);
+            Toast.makeText(this, "Location saved", Toast.LENGTH_LONG).show();
+        }
     }
+
     public boolean connectToWiFi(String ssid, String user, String pass, TextView status) {
         status.setText("Connecting To Wi-Fi");
         wifiConnect connect = new wifiConnect();
@@ -145,6 +201,30 @@ public class Beam extends Activity implements CreateNdefMessageCallback,
             return false;
         } else {
             return true;
+        }
+    }
+
+    public void saveLoc(String Loc){
+        String file_Name = "past_locations.txt";
+        FileOutputStream outputStream = null;
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        String Formattedloc = Loc.substring(Loc.indexOf("[") + 1, Loc.indexOf("]"));
+        try {
+            LocalDateTime time = LocalDateTime.now();
+            outputStream = openFileOutput(file_Name, MODE_APPEND);
+            outputStream.write(Formattedloc.getBytes());
+            String now = " " + dtf.format(time);
+            outputStream.write(now.getBytes());
+            outputStream.write("\n".getBytes());
+            Toast.makeText(this, "Saved To " + getFilesDir() + "/" + file_Name, Toast.LENGTH_LONG).show();
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            try {
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

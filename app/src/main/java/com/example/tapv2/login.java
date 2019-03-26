@@ -1,11 +1,16 @@
 package com.example.tapv2;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,16 +23,20 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Set;
 
 public class login extends AppCompatActivity {
-
+    final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-
+        perms(this);
+        locationsFile(this);
     }
     public void logIn(View view){
         EditText userInput = findViewById(R.id.editUser);
@@ -76,5 +85,32 @@ public class login extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void locationsFile(Context context) {
+        File file = new File(context.getFilesDir(), "/past_locations.txt");
+        boolean exists = file.exists();
+        if (!exists) {
+            try {
+                file.createNewFile();
+                Toast.makeText(context, "Locations File Created", Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                return;
+            }
+        } else {
+            Toast.makeText(context, "Locations File Exists", Toast.LENGTH_SHORT).show();
+            return;
+        }
+    }
+
+    public boolean perms(Context context){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
+        }
+        if (ContextCompat.checkSelfPermission(this,Manifest.permission.NFC) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.NFC}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+        return true;
     }
 }

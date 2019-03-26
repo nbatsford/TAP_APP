@@ -5,20 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/backgroundPrimary">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center">
+        android:gravity="top|center_horizontal">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="120dp"
-            android:gravity="top"
-            android:text="Welcome to TAP"
-            android:textAlignment="center"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="80dp"
+            android:text="TAP"
             android:textColor="@color/mainText_Orange"
             android:textSize="40sp" />
     </LinearLayout>
@@ -31,9 +32,10 @@
 
         <TextView
             android:id="@+id/textView5"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:textSize="20dp"
             android:text="@string/press_the_connect_button_to_start_connecting_to_the_wifi" />
 
         <Button
@@ -41,38 +43,49 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:background="@color/popupBackground_Orange"
+            android:textSize="20dp"
+            android:background="@color/buttonColour"
             android:onClick="startConnect"
             android:text="@string/connect"
-            android:textColor="@color/popupText_White" />
+            android:textColor="@color/buttonText" />
+
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@color/buttonColour"
+            android:onClick="buttloc"
+            android:text="Where have you been"
+            android:textColor="@color/buttonText" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="center"
-            android:orientation="horizontal">
-
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
             <Button
-                android:layout_width="145dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:background="@color/popupBackground_Orange"
+                android:background="@color/buttonColour"
                 android:onClick="connHelp"
                 android:paddingBottom="5dp"
                 android:text="Help"
-                android:textColor="@color/popupText_White" />
+                android:textColor="@color/buttonText" />
 
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="10dp">
             <Button
-                android:layout_width="145dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/popupBackground_Orange"
-                android:paddingBottom="5dp"
-                android:text="Settings"
-                android:textColor="@color/popupText_White" />
+                android:text="Log Out"
+                android:textColor="@color/buttonText"
+                android:background="@color/buttonColour"/>
         </LinearLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

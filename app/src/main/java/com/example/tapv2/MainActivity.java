@@ -42,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
+    }
+    public void buttloc(View view) {
+        Intent locIntent = new Intent(this, past_locations.class);
+        startActivity(locIntent);
     }
 }
