@@ -2,7 +2,10 @@ package com.example.tapv2;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -19,7 +22,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -37,6 +42,8 @@ public class login extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+/*        ImageView imageView = findViewById(R.id.imgLogoLogin);
+        imageView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.logo));*/
         setContentView(R.layout.login);
         perms(this);
         locationsFile(this);
@@ -89,7 +96,27 @@ public class login extends AppCompatActivity {
         });
 
     }
-    public void randomDetails(View view) {
+    public void randomDialog(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(login.this);
+        builder.setTitle("Use a Random Username and Password?");
+        builder.setMessage("By doing this you will not be able to connect to the Wi-Fi using the same credentials on your laptop or other NON-NFC enabled Android devices.");
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        randomDetails();
+                    }
+                })
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void randomDetails(){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor saveDetails = preferences.edit();
         Intent loggedin = new Intent(this, MainActivity.class);
@@ -102,7 +129,6 @@ public class login extends AppCompatActivity {
         saveDetails.apply();
         startActivity(loggedin);
     }
-
     public String randomString(){
         String source = "ABCDEFGHIJKMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         Random random = new Random();

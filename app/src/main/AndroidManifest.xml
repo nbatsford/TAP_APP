@@ -20,7 +20,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/temp_logo"
         android:label="TAP"
-        android:roundIcon="@mipmap/temp_logo_round"
+        android:roundIcon="@mipmap/tap_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
